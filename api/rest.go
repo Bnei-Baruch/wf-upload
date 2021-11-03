@@ -9,44 +9,13 @@ import (
 	"os"
 )
 
-func getUploadPath(ep string) string {
-
-	switch ep {
-	case "insert":
-		return "/backup/tmp/insert/"
-	case "jobs":
-		return "/backup/jobs/"
-	case "products":
-		return "/backup/files/upload/"
-	case "aricha":
-		return "/backup/aricha/"
-	case "aklada":
-		return "/backup/tmp/akladot/"
-	case "gibuy":
-		return "/tmp/"
-	case "carbon":
-		return "/backup/tmp/carbon/"
-	case "dgima":
-		return "/backup/dgima/"
-	case "proxy":
-		return "/backup/tmp/proxy/"
-	case "youtube":
-		return "/backup/tmp/youtube/"
-	case "coder":
-		return "/backup/tmp/coder/"
-	case "muxer":
-		return "/backup/tmp/muxer/"
-	default:
-		return "/backup/tmp/upload/"
-	}
-}
-
 func (a *App) handleUpload(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	endpoint := vars["ep"]
+	lang := vars["lang"]
+	ftype := vars["type"]
 	var u Upload
 
-	uploadpath := getUploadPath(endpoint)
+	uploadpath := "/backup/" + lang + "/" + ftype + "/"
 
 	if _, err := os.Stat(uploadpath); os.IsNotExist(err) {
 		os.MkdirAll(uploadpath, 0755)
@@ -126,8 +95,6 @@ func (a *App) handleUpload(w http.ResponseWriter, r *http.Request) {
 		// cleaned up
 
 		os.Rename(tempfile.Name(), u.Url)
-		u.UploadProps(u.Url, endpoint)
+		u.UploadProps(u.Url)
 	}
 }
-
-

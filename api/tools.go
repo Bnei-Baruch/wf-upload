@@ -24,7 +24,7 @@ type Status struct {
 	Result map[string]interface{} `json:"jsonst"`
 }
 
-func (u *Upload) UploadProps(filepath string, ep string) error {
+func (u *Upload) UploadProps(filepath string) error {
 
 	f, err := os.Open(filepath)
 	if err != nil {

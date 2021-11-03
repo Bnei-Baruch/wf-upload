@@ -111,7 +111,7 @@ func (a *App) LoggingMiddleware(next http.Handler) http.Handler {
 func checkPermission(roles []string) bool {
 	if roles != nil {
 		for _, r := range roles {
-			if r == "bb_user" {
+			if r == "wf_upload" {
 				return true
 			}
 		}
