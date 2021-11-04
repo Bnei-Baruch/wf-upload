@@ -45,6 +45,13 @@ func (a *App) LoggingMiddleware(next http.Handler) http.Handler {
 			return
 		}
 
+		// Right now we don't need to check token on download
+		url := strings.Split(r.URL.Path, "/")
+		if len(url) > 0 && url[0] == "data" {
+			next.ServeHTTP(w, r)
+			return
+		}
+
 		// Detect IP Address
 		ip := getRealIP(r)
 		//log.Println(ip)
