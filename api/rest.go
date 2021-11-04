@@ -12,10 +12,10 @@ import (
 func (a *App) handleUpload(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	lang := vars["lang"]
-	ftype := vars["type"]
+	ftype := vars["ftype"]
 	var u Upload
 
-	uploadpath := "/backup/" + lang + "/" + ftype + "/"
+	uploadpath := "/data/" + lang + "/" + ftype + "/"
 
 	if _, err := os.Stat(uploadpath); os.IsNotExist(err) {
 		os.MkdirAll(uploadpath, 0755)

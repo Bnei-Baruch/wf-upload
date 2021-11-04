@@ -51,8 +51,8 @@ func (a *App) Run(port string) {
 
 func (a *App) InitializeRoutes() {
 	a.Router.Use(a.LoggingMiddleware)
-	a.Router.HandleFunc("/upload/{type}/{lang}", a.handleUpload).Methods("POST")
-	a.Router.PathPrefix("/backup/").Handler(http.StripPrefix("/backup/", http.FileServer(http.Dir("/backup"))))
+	a.Router.HandleFunc("/upload/{lang}/{ftype}", a.handleUpload).Methods("POST")
+	a.Router.PathPrefix("/data/").Handler(http.StripPrefix("/data/", http.FileServer(http.Dir("/data"))))
 }
 
 func respondWithError(w http.ResponseWriter, code int, message string) {
