@@ -44,8 +44,7 @@ func (a *App) LoggingMiddleware(next http.Handler) http.Handler {
 		}
 
 		// Right now we don't need to check token on download
-		url := strings.Split(r.URL.Path, "/")
-		if len(url) > 0 && url[0] == "data" {
+		if r.Method == "GET" {
 			next.ServeHTTP(w, r)
 			return
 		}
@@ -94,19 +93,9 @@ func checkPermission(roles []string) bool {
 
 func parseToken(r *http.Request) string {
 	var token = ""
-	url := strings.Split(r.URL.Path, "/")
-	if len(url) > 1 && url[1] == "backup" || url[1] == "mnt" {
-		var authHeader, err = r.Cookie("token")
-		if err == nil {
-			token = authHeader.Value
-		} else {
-			token = r.FormValue("token")
-		}
-	} else {
-		authHeader := strings.Split(strings.TrimSpace(r.Header.Get("Authorization")), " ")
-		if len(authHeader) == 2 && strings.ToLower(authHeader[0]) == "bearer" && len(authHeader[1]) > 0 {
-			token = authHeader[1]
-		}
+	authHeader := strings.Split(strings.TrimSpace(r.Header.Get("Authorization")), " ")
+	if len(authHeader) == 2 && strings.ToLower(authHeader[0]) == "bearer" && len(authHeader[1]) > 0 {
+		token = authHeader[1]
 	}
 	return token
 }
