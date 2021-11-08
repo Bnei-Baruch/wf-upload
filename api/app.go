@@ -33,18 +33,19 @@ func (a *App) Initialize() {
 	a.InitializeRoutes()
 }
 
-func (a *App) Run(port string) {
+func (a *App) Run(addr string, port string) {
 	headersOk := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Content-Length", "Accept-Encoding", "Content-Range", "Content-Disposition", "Authorization"})
 	originsOk := handlers.AllowedOrigins([]string{"*"})
 	methodsOk := handlers.AllowedMethods([]string{"GET", "DELETE", "POST", "PUT", "OPTIONS"})
 
 	if port == "" {
-		port = ":8010"
+		port = "8010"
 	}
 
-	log.Info().Str("source", "APP").Msgf("app run %s", port)
+	listen := addr + ":" + port
+	log.Info().Str("source", "APP").Msgf("app run %s", listen)
 
-	if err := http.ListenAndServe(port, handlers.CORS(originsOk, headersOk, methodsOk)(a.Router)); err != nil {
+	if err := http.ListenAndServe(listen, handlers.CORS(originsOk, headersOk, methodsOk)(a.Router)); err != nil {
 		log.Fatal().Str("source", "APP").Err(err).Msg("http.ListenAndServe")
 	}
 }

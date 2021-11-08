@@ -6,11 +6,10 @@ import (
 	"github.com/Bnei-Baruch/wf-upload/common"
 )
 
-
 func Init() {
 	flag.Parse()
 	a := api.App{}
 	a.InitClient()
 	a.Initialize()
-	a.Run(":" + common.PORT)
+	a.Run(common.ADDR, common.PORT)
 }
